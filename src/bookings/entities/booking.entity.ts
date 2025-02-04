@@ -10,6 +10,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  JoinTable,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity('bookings')
@@ -27,13 +29,16 @@ export class Booking {
   shop_service_id: string;
 
   @Column({ type: 'json', nullable: true })
-  shop_service_ids: any; 
+  shop_service_ids: any;
 
   @Column({ type: 'json', nullable: true })
   userDetail: any;
 
   @Column({ type: 'varchar', nullable: true })
   note: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  status: string;
 
   @Column({ type: 'boolean', nullable: true })
   is_online: string;
@@ -69,9 +74,21 @@ export class Booking {
   @JoinColumn({ name: 'shop_room_id' })
   shopRoom: ShopRoom;
 
-  @ManyToOne(() => ShopService, (ShopService) => ShopService.bookings, {
-    onDelete: 'CASCADE',
+  // @ManyToOne(() => ShopService, (ShopService) => ShopService.bookings, {
+  //   onDelete: 'CASCADE',
+  // })
+  // @JoinColumn({ name: 'shop_room_id' })
+  // shopService: ShopService;
+
+  @ManyToMany(() => ShopService)
+  @JoinTable({
+    name: 'booking_service',
+    joinColumn: {
+      name: 'booking_id',
+    },
+    inverseJoinColumn: {
+      name: 'shop_service_id',
+    },
   })
-  @JoinColumn({ name: 'shop_room_id' })
-  shopService: ShopService;
+  shopServices: ShopService[];
 }

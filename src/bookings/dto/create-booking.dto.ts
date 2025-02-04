@@ -11,6 +11,7 @@ import {
   IsUUID,
   IsDate,
   ArrayMinSize,
+  IsIn,
 } from 'class-validator';
 
 class UserDetails {
@@ -47,8 +48,6 @@ export class CreateBookingDto {
 
   @IsNotEmpty()
   date?: string;
-
-  
 }
 
 export class CreateBookingAdminDto {
@@ -84,4 +83,8 @@ export class CreateBookingAdminDto {
   userDetail: UserDetails;
 }
 
-
+export class updateBookingStatus {
+  @IsString()
+  @IsIn(['booked', 'completed', 'canceled'])
+  status: string;
+}

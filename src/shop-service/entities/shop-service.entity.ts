@@ -73,8 +73,8 @@ export class ShopService {
   })
   service: Service;
 
-  @OneToMany(() => Booking, (Booking) => Booking.shopService)
-  bookings: Booking[];
+  // @OneToMany(() => Booking, (Booking) => Booking.shopService)
+  // bookings: Booking[];
 
   @ManyToMany(() => ShopRoom)
   @JoinTable({
@@ -87,4 +87,16 @@ export class ShopService {
     },
   })
   shopRooms: ShopRoom[];
+
+  @ManyToMany(() => Booking)
+  @JoinTable({
+    name: 'booking_service',
+    joinColumn: {
+      name: 'shop_service_id',
+    },
+    inverseJoinColumn: {
+      name: 'booking_id',
+    },
+  })
+  Bookings: Booking[];
 }

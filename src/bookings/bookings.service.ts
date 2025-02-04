@@ -1,11 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { CreateBookingAdminDto, CreateBookingDto } from './dto/create-booking.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  CreateBookingAdminDto,
+  CreateBookingDto,
+  updateBookingStatus,
+} from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { ResponseService } from 'src/common/services/response.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from './entities/booking.entity';
 import { Repository } from 'typeorm';
-import { paginate, PaginateQuery } from 'nestjs-paginate';
+import {
+  FilterOperator,
+  FilterSuffix,
+  paginate,
+  PaginateQuery,
+} from 'nestjs-paginate';
+import { ShopServiceService } from 'src/shop-service/shop-service.service';
 
 @Injectable()
 export class BookingsService {
@@ -13,7 +23,8 @@ export class BookingsService {
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
     private response: ResponseService,
-  ) { }
+    private shopServiceService: ShopServiceService,
+  ) {}
   async create(bookingData: CreateBookingDto, user_id: string) {
     bookingData.user_id = user_id;
     const booking = this.bookingRepository.create(bookingData);
@@ -25,17 +36,21 @@ export class BookingsService {
   async findAll(query: PaginateQuery) {
     return paginate(query, this.bookingRepository, {
       sortableColumns: ['id'],
-      relations: ['shopRoom', 'shopService'],
+      relations: ['shopRoom', 'shopServices'],
       defaultSortBy: [['id', 'DESC']],
       searchableColumns: ['date'],
-      filterableColumns: {},
+      filterableColumns: {
+        shop_room_id: [FilterOperator.EQ, FilterSuffix.NOT],
+        date: [FilterOperator.EQ, FilterSuffix.NOT],
+        status: [FilterOperator.EQ, FilterSuffix.NOT],
+      },
     });
   }
 
   async findAllUser(query: PaginateQuery, user_id: string) {
     return paginate(query, this.bookingRepository, {
       sortableColumns: ['id'],
-      relations: ['shopRoom', 'shopService'],
+      relations: ['shopRoom', 'shopServices'],
       defaultSortBy: [['id', 'DESC']],
       searchableColumns: ['date'],
       filterableColumns: {},
@@ -61,12 +76,45 @@ export class BookingsService {
     await this.bookingRepository.softDelete(id);
   }
 
-  async createBookingAdmin(bookingData: CreateBookingAdminDto, user_id: string) {
-    const { shop_service_ids } = bookingData
+  async createBookingAdmin(
+    bookingData: CreateBookingAdminDto,
+    user_id: string,
+  ) {
+    const { shop_service_ids } = bookingData;
+
+    const services = await this.shopServiceService.findByIds(shop_service_ids);
     bookingData.user_id = user_id;
+
     const booking = this.bookingRepository.create(bookingData);
     const savedBooking = await this.bookingRepository.save(booking);
 
     return this.response.successResponse('booking recorded', savedBooking);
+  }
+
+  async findOneByParam(
+    params: { [key: string]: any },
+    relations?: string[],
+  ): Promise<Booking | undefined> {
+    return this.bookingRepository.findOne({
+      where: params,
+      relations,
+    });
+  }
+
+  async updateStatus(id: string, data: updateBookingStatus) {
+    const booking = await this.findOneById(id);
+    booking.status = data.status;
+    await this.bookingRepository.save(booking);
+    return this.response.successResponse('booking updated');
+  }
+
+  async findOneById(id: string): Promise<Booking | null> {
+    const booking = await this.bookingRepository.findOne({
+      where: { id },
+    });
+    if (!booking) {
+      throw new NotFoundException('not fount');
+    }
+    return booking;
   }
 }

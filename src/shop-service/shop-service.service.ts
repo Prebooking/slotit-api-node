@@ -3,7 +3,7 @@ import { CreateShopServiceDto } from './dto/create-shop-service.dto';
 import { UpdateShopServiceDto } from './dto/update-shop-service.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ShopService } from './entities/shop-service.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ResponseService } from 'src/common/services/response.service';
 import { ShopsService } from 'src/shops/shops.service';
 import { ServicesService } from 'src/services/services.service';
@@ -96,5 +96,11 @@ export class ShopServiceService {
       throw new NotFoundException(`Shop service with ID "${id}" not found`);
     }
     return shopService;
+  }
+
+  async findByIds(ids: any[]): Promise<ShopService[]> {
+    return await this.shopServicesRepository.find({
+      where: { id: In(ids) },
+    });
   }
 }

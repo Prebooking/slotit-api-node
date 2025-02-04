@@ -5,12 +5,14 @@ import { paginate, PaginateQuery } from 'nestjs-paginate';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TimeSlot } from './entities/time-slot.entity';
 import { Repository } from 'typeorm';
+import { BookingsService } from 'src/bookings/bookings.service';
 
 @Injectable()
 export class TimeSlotsService {
   constructor(
     @InjectRepository(TimeSlot)
     private timeSlotRepository: Repository<TimeSlot>,
+    private bookingService: BookingsService,
   ) {}
   create(createTimeSlotDto: CreateTimeSlotDto) {
     return 'This action adds a new timeSlot';

@@ -18,5 +18,6 @@ import { ShopRoomsModule } from 'src/shop-rooms/shop-rooms.module';
   ],
   controllers: [ShopServiceController],
   providers: [ShopServiceService],
+  exports: [ShopServiceService],
 })
 export class ShopServiceModule {}

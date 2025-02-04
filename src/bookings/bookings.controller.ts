@@ -10,7 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { CreateBookingAdminDto, CreateBookingDto } from './dto/create-booking.dto';
+import {
+  CreateBookingAdminDto,
+  CreateBookingDto,
+  updateBookingStatus,
+} from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
@@ -37,6 +41,7 @@ export class BookingsController {
     );
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get()
   async findAll(@Paginate() query: PaginateQuery) {
     return await this.bookingService.findAll(query);
@@ -59,6 +64,14 @@ export class BookingsController {
     @Body() bookingData: Partial<Booking>,
   ): Promise<Booking> {
     return await this.bookingService.update(id, bookingData);
+  }
+
+  @Patch(':id/update-status')
+  async updateStatus(
+    @Param('id') id: string,
+    @Body() bookingData: updateBookingStatus,
+  ): Promise<any> {
+    return await this.bookingService.updateStatus(id, bookingData);
   }
 
   @Delete(':id')
