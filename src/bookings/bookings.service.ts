@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBookingDto } from './dto/create-booking.dto';
+import { CreateBookingAdminDto, CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { ResponseService } from 'src/common/services/response.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,7 +13,7 @@ export class BookingsService {
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
     private response: ResponseService,
-  ) {}
+  ) { }
   async create(bookingData: CreateBookingDto, user_id: string) {
     bookingData.user_id = user_id;
     const booking = this.bookingRepository.create(bookingData);
@@ -61,7 +61,8 @@ export class BookingsService {
     await this.bookingRepository.softDelete(id);
   }
 
-  async createBookingAdmin(bookingData: CreateBookingDto, user_id: string) {
+  async createBookingAdmin(bookingData: CreateBookingAdminDto, user_id: string) {
+    const { shop_service_ids } = bookingData
     bookingData.user_id = user_id;
     const booking = this.bookingRepository.create(bookingData);
     const savedBooking = await this.bookingRepository.save(booking);

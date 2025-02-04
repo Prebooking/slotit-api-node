@@ -81,7 +81,7 @@ export class CreateBookingAdminDto {
   @IsObject()
   @ValidateNested()
   @Type(() => UserDetails)
-  user: UserDetails;
+  userDetail: UserDetails;
 }
 
 

@@ -23,8 +23,14 @@ export class Booking {
   @Column({ type: 'varchar', nullable: true })
   shop_room_id: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ nullable: true })
   shop_service_id: string;
+
+  @Column({ nullable: true })
+  userDetail: any;
+
+  @Column({ nullable: true })
+  shop_service_ids: any[];
 
   @Column({ type: 'varchar', nullable: true })
   note: string;
