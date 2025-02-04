@@ -24,7 +24,7 @@ export class BookingsService {
     private readonly bookingRepository: Repository<Booking>,
     private response: ResponseService,
     private shopServiceService: ShopServiceService,
-  ) { }
+  ) {}
   async create(bookingData: CreateBookingDto, user_id: string) {
     bookingData.user_id = user_id;
     const booking = this.bookingRepository.create(bookingData);
@@ -84,9 +84,9 @@ export class BookingsService {
 
     const services = await this.shopServiceService.findByIds(shop_service_ids);
     bookingData.user_id = user_id;
-
     const booking = this.bookingRepository.create(bookingData);
     booking.shopServices = services;
+    booking.is_online = false;
 
     const savedBooking = await this.bookingRepository.save(booking);
     // await this.bookingRepository.save(savedBooking);
@@ -118,5 +118,14 @@ export class BookingsService {
       throw new NotFoundException('not fount');
     }
     return booking;
+  }
+
+  async findByParam(params: {
+    [key: string]: any;
+  }): Promise<Booking | undefined> {
+    return this.bookingRepository.findOne({
+      where: params,
+      select: ['time_from', 'time_to'],
+    });
   }
 }

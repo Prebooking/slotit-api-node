@@ -41,7 +41,7 @@ export class Booking {
   status: string;
 
   @Column({ type: 'boolean', nullable: true })
-  is_online: string;
+  is_online: boolean;
 
   @Column({ type: 'time', nullable: true, default: '00:00:00' })
   time_from: string;
@@ -51,6 +51,9 @@ export class Booking {
 
   @Column({ type: 'date', nullable: true })
   date: string;
+
+  @Column({ nullable: true })
+  amount: number;
 
   @Column({ type: 'json', nullable: true })
   meta: Record<string, any>;

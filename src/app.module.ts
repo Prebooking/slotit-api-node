@@ -15,6 +15,7 @@ import { ShopServiceModule } from './shop-service/shop-service.module';
 import { RoleUserModule } from './role-user/role-user.module';
 import { TimeSlotsModule } from './time-slots/time-slots.module';
 import { BookingsModule } from './bookings/bookings.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { BookingsModule } from './bookings/bookings.module';
     RoleUserModule,
     TimeSlotsModule,
     BookingsModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
