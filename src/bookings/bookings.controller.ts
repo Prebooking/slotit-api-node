@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-import { CreateBookingDto } from './dto/create-booking.dto';
+import { CreateBookingAdminDto, CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
@@ -28,7 +28,7 @@ export class BookingsController {
 
   @Post('admin')
   async createBookingAdmin(
-    @Body() bookingData: CreateBookingDto,
+    @Body() bookingData: CreateBookingAdminDto,
     @Req() req: Request,
   ) {
     return await this.bookingService.createBookingAdmin(
