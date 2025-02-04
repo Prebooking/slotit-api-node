@@ -4,11 +4,12 @@ export class AddUserToBookingsTable1738649284397 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
-            'ALTER TABLE `bookings` ADD `shop_service_ids` JSON DEFAULT NULL AFTER `status`;',
+            'ALTER TABLE `bookings` ADD COLUMN `shop_service_ids` JSON DEFAULT NULL AFTER `status`;',
         );
         await queryRunner.query(
-            'ALTER TABLE `bookings` ADD `userDetail` JSON DEFAULT NULL AFTER `shop_service_ids`;',
+            'ALTER TABLE `bookings` ADD COLUMN `userDetail` JSON DEFAULT NULL AFTER `shop_service_ids`;',
         );
+        
         
     }
 

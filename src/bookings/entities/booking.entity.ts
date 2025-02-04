@@ -26,11 +26,11 @@ export class Booking {
   @Column({ nullable: true })
   shop_service_id: string;
 
-  @Column({ nullable: true })
-  userDetail: any;
+  @Column({ type: 'json', nullable: true })
+  shop_service_ids: any; 
 
-  @Column({ nullable: true })
-  shop_service_ids: any[];
+  @Column({ type: 'json', nullable: true })
+  userDetail: any;
 
   @Column({ type: 'varchar', nullable: true })
   note: string;
