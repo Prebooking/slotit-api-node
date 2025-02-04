@@ -24,7 +24,7 @@ export class BookingsService {
     private readonly bookingRepository: Repository<Booking>,
     private response: ResponseService,
     private shopServiceService: ShopServiceService,
-  ) {}
+  ) { }
   async create(bookingData: CreateBookingDto, user_id: string) {
     bookingData.user_id = user_id;
     const booking = this.bookingRepository.create(bookingData);
@@ -86,8 +86,10 @@ export class BookingsService {
     bookingData.user_id = user_id;
 
     const booking = this.bookingRepository.create(bookingData);
-    const savedBooking = await this.bookingRepository.save(booking);
+    booking.shopServices = services;
 
+    const savedBooking = await this.bookingRepository.save(booking);
+    // await this.bookingRepository.save(savedBooking);
     return this.response.successResponse('booking recorded', savedBooking);
   }
 
