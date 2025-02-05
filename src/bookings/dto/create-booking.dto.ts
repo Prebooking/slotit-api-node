@@ -76,6 +76,9 @@ export class CreateBookingAdminDto {
   @IsNotEmpty()
   date?: string;
 
+  @IsOptional()
+  amount: number;
+
   @IsNotEmpty()
   @IsObject()
   @ValidateNested()

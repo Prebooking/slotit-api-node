@@ -11,7 +11,10 @@ import {
 import { AnalyticsService } from './analytics.service';
 import { CreateAnalyticsDto } from './dto/create-analytics.dto';
 import { UpdateAnalyticsDto } from './dto/update-analytics.dto';
-import { GetBasicAnalyticsDto } from './dto/get-analytics.dto';
+import {
+  GetBasicAnalyticsDto,
+  GetRoomAnalyticsDto,
+} from './dto/get-analytics.dto';
 
 @Controller('analytics')
 export class AnalyticsController {
@@ -27,21 +30,8 @@ export class AnalyticsController {
     return this.analyticsService.basicAnalytics(filter);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.analyticsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateAnalyticsDto: UpdateAnalyticsDto,
-  ) {
-    return this.analyticsService.update(+id, updateAnalyticsDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.analyticsService.remove(+id);
+  @Get('shops/:id/rooms')
+  findOne(@Param('id') id: string, @Query() filter: GetRoomAnalyticsDto) {
+    return this.analyticsService.roomAnalytics(id, filter);
   }
 }

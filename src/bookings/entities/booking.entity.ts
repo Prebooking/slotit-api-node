@@ -58,6 +58,9 @@ export class Booking {
   @Column({ type: 'json', nullable: true })
   meta: Record<string, any>;
 
+  @Column({ nullable: true })
+  services_count: number;
+
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
@@ -70,6 +73,13 @@ export class Booking {
   @ManyToOne(() => User, (user) => user.bookings, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @Column({ type: 'varchar', nullable: true })
+  staff_id: string;
+
+  @ManyToOne(() => User, (user) => user.staffBookings, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  staff: User;
 
   @ManyToOne(() => ShopRoom, (shopRoom) => shopRoom.bookings, {
     onDelete: 'CASCADE',

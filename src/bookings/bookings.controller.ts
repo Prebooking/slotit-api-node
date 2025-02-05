@@ -66,12 +66,14 @@ export class BookingsController {
     return await this.bookingService.update(id, bookingData);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Patch(':id/update-status')
   async updateStatus(
     @Param('id') id: string,
     @Body() bookingData: updateBookingStatus,
+    @Req() req: Request,
   ): Promise<any> {
-    return await this.bookingService.updateStatus(id, bookingData);
+    return await this.bookingService.updateStatus(id, bookingData, req['uid']);
   }
 
   @Delete(':id')

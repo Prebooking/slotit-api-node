@@ -80,13 +80,19 @@ export class BookingsService {
     bookingData: CreateBookingAdminDto,
     user_id: string,
   ) {
-    const { shop_service_ids } = bookingData;
+    const { shop_service_ids, amount } = bookingData;
 
     const services = await this.shopServiceService.findByIds(shop_service_ids);
+    const totalCharge = services.reduce(
+      (sum, service) => sum + service.charge,
+      0,
+    );
+
     bookingData.user_id = user_id;
     const booking = this.bookingRepository.create(bookingData);
     booking.shopServices = services;
     booking.is_online = false;
+    booking.amount = amount ? amount : totalCharge;
 
     const savedBooking = await this.bookingRepository.save(booking);
     // await this.bookingRepository.save(savedBooking);
@@ -103,9 +109,10 @@ export class BookingsService {
     });
   }
 
-  async updateStatus(id: string, data: updateBookingStatus) {
+  async updateStatus(id: string, data: updateBookingStatus, user_id: string) {
     const booking = await this.findOneById(id);
     booking.status = data.status;
+    booking.staff_id = user_id;
     await this.bookingRepository.save(booking);
     return this.response.successResponse('booking updated');
   }

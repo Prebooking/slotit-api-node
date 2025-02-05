@@ -133,4 +133,12 @@ export class ShopRoomsService {
       },
     });
   }
+
+  async findOneByShopId(shop_id: string) {
+    return await this.shopRoomsRepository.find({
+      where: {
+        shop_id,
+      },
+    });
+  }
 }

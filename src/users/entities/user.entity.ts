@@ -104,4 +104,7 @@ export class User {
 
   @OneToMany(() => Booking, (Booking) => Booking.user)
   bookings: Booking[];
+
+  @OneToMany(() => Booking, (Booking) => Booking.staff)
+  staffBookings: Booking[];
 }

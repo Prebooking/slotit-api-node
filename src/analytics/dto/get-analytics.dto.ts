@@ -13,3 +13,11 @@ export class GetBasicAnalyticsDto {
   @IsNotEmpty()
   shop_id?: number;
 }
+
+export class GetRoomAnalyticsDto {
+  @IsOptional()
+  from_date: Date;
+
+  @IsOptional()
+  to_date: Date;
+}
