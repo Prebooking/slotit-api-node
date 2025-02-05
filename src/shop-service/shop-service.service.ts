@@ -14,6 +14,7 @@ import {
   PaginateQuery,
 } from 'nestjs-paginate';
 import { ShopRoomsService } from 'src/shop-rooms/shop-rooms.service';
+import { GetRoomAnalyticsDto } from 'src/analytics/dto/get-analytics.dto';
 
 @Injectable()
 export class ShopServiceService {
@@ -102,5 +103,84 @@ export class ShopServiceService {
     return await this.shopServicesRepository.find({
       where: { id: In(ids) },
     });
+  }
+
+  async shopServiceAnalytics(shop_id: string, filter: GetRoomAnalyticsDto) {
+    const { from_date, to_date } = filter;
+    const currentDate = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
+
+    const query = this.shopServicesRepository
+      .createQueryBuilder('ss')
+      .select('ss.id', 'shop_service_id')
+      .addSelect('ss.name', 'shop_service_name')
+      .addSelect('COUNT(b.id)', 'bookings_count') // Count of bookings for each service
+      .leftJoin('ss.Bookings', 'b') // Left join to bookings through the ManyToMany relation
+      .where('ss.shop_id = :shop_id', { shop_id }); // Filter by shop_id
+
+    // Apply date filter if provided
+    if (from_date && to_date) {
+      query.andWhere('b.date BETWEEN :from_date AND :to_date', {
+        from_date,
+        to_date,
+      });
+    } else {
+      // If no date range, use today's date
+      query.andWhere('b.date = :currentDate', { currentDate });
+    }
+
+    const result = await query.groupBy('ss.id, ss.name').getRawMany();
+
+    // Fetch all services for the given shop_id (even if there are no bookings)
+    const allServices = await this.shopServicesRepository.find({
+      where: {
+        shop_id,
+      },
+    });
+
+    // Merge all services with the result data, setting bookings count to 0 if no bookings for the service
+    const analytics = allServices.map((service) => {
+      const serviceData = result.find((r) => r.shop_service_id === service.id);
+      return {
+        shop_service_name: service.name,
+        bookings_count: serviceData ? parseInt(serviceData.bookings_count) : 0,
+      };
+    });
+
+    return analytics;
+  }
+
+  async mostBookedServicesAnalytics(
+    shop_id: string,
+    filter: GetRoomAnalyticsDto,
+  ) {
+    const { from_date, to_date } = filter;
+    const currentDate = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
+
+    const query = this.shopServicesRepository
+      .createQueryBuilder('ss')
+      .select('ss.id', 'shop_service_id')
+      .addSelect('ss.name', 'shop_service_name')
+      .addSelect('COUNT(b.id)', 'bookings_count') // Count of bookings for each service
+      .leftJoin('ss.Bookings', 'b') // Left join to bookings through the ManyToMany relation
+      .where('ss.shop_id = :shop_id', { shop_id });
+
+    // Apply date filter if provided
+    if (from_date && to_date) {
+      query.andWhere('b.date BETWEEN :from_date AND :to_date', {
+        from_date,
+        to_date,
+      });
+    } else {
+      // If no date range, use today's date
+      query.andWhere('b.date = :currentDate', { currentDate });
+    }
+
+    const result = await query
+      .groupBy('ss.id, ss.name')
+      .orderBy('bookings_count', 'DESC') // Order by the bookings count in descending order
+      .limit(5) // Get top 5 services with most bookings
+      .getRawMany();
+
+    return result;
   }
 }

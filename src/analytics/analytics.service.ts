@@ -11,12 +11,16 @@ import {
 } from './dto/get-analytics.dto';
 import { ShopRoom } from 'src/shop-rooms/entities/shop-room.entity';
 import { ShopRoomsService } from 'src/shop-rooms/shop-rooms.service';
+import { ShopService } from 'src/shop-service/entities/shop-service.entity';
+import { ShopServiceService } from 'src/shop-service/shop-service.service';
 
 @Injectable()
 export class AnalyticsService {
   constructor(
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
+    private shopServiceService: ShopServiceService,
+
     private response: ResponseService,
     private shopRoomService: ShopRoomsService,
   ) {}
@@ -94,6 +98,25 @@ export class AnalyticsService {
       };
     });
 
+    return this.response.successResponse('room analytics', analytics);
+  }
+
+  async shopServiceAnalytics(shop_id: string, filter: GetRoomAnalyticsDto) {
+    const analytics = await this.shopServiceService.shopServiceAnalytics(
+      shop_id,
+      filter,
+    );
+    return this.response.successResponse('room analytics', analytics);
+  }
+
+  async mostBookedServicesAnalytics(
+    shop_id: string,
+    filter: GetRoomAnalyticsDto,
+  ) {
+    const analytics = await this.shopServiceService.mostBookedServicesAnalytics(
+      shop_id,
+      filter,
+    );
     return this.response.successResponse('room analytics', analytics);
   }
 }

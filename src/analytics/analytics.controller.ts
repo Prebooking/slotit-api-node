@@ -34,4 +34,20 @@ export class AnalyticsController {
   findOne(@Param('id') id: string, @Query() filter: GetRoomAnalyticsDto) {
     return this.analyticsService.roomAnalytics(id, filter);
   }
+
+  @Get('shops/:id/services')
+  shopServiceAnalytics(
+    @Param('id') id: string,
+    @Query() filter: GetRoomAnalyticsDto,
+  ) {
+    return this.analyticsService.shopServiceAnalytics(id, filter);
+  }
+
+  @Get('shops/:id/services-most-used')
+  mostBookedServicesAnalytics(
+    @Param('id') id: string,
+    @Query() filter: GetRoomAnalyticsDto,
+  ) {
+    return this.analyticsService.mostBookedServicesAnalytics(id, filter);
+  }
 }
