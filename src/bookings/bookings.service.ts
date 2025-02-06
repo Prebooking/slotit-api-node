@@ -84,7 +84,7 @@ export class BookingsService {
 
     const services = await this.shopServiceService.findByIds(shop_service_ids);
     const totalCharge = services.reduce(
-      (sum, service) => sum + service.charge,
+      (sum, service) => sum + Number(service.charge),
       0,
     );
 
