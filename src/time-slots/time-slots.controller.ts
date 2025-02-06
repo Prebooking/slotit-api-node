@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { TimeSlotsService } from './time-slots.service';
 import { CreateTimeSlotDto } from './dto/create-time-slot.dto';
 import { UpdateTimeSlotDto } from './dto/update-time-slot.dto';
 import { Paginate, PaginateQuery } from 'nestjs-paginate';
+import { GetTimeSlotDto } from './dto/get-time-slots.dto';
 
 @Controller('time-slots')
 export class TimeSlotsController {
@@ -27,9 +29,13 @@ export class TimeSlotsController {
   }
 
   @Get('admin')
-  async findAllAdmin(@Paginate() query: PaginateQuery) {
-    return await this.timeSlotsService.findAllAdmin(query);
+  async findAllAdmin(
+    @Paginate() query: PaginateQuery,
+    @Query() filter: Record<string, any>,
+  ) {
+    return await this.timeSlotsService.findAllAdmin(query, filter);
   }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.timeSlotsService.findOne(+id);

@@ -129,8 +129,8 @@ export class BookingsService {
 
   async findByParam(params: {
     [key: string]: any;
-  }): Promise<Booking | undefined> {
-    return this.bookingRepository.findOne({
+  }): Promise<Booking[] | undefined> {
+    return this.bookingRepository.find({
       where: params,
       select: ['time_from', 'time_to'],
     });
