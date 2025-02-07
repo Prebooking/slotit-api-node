@@ -4,7 +4,7 @@ import { UpdateTimeSlotDto } from './dto/update-time-slot.dto';
 import { paginate, PaginateQuery } from 'nestjs-paginate';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TimeSlot } from './entities/time-slot.entity';
-import { In, Repository } from 'typeorm';
+import { Between, In, IsNull, Not, Repository } from 'typeorm';
 import { BookingsService } from 'src/bookings/bookings.service';
 import { GetTimeSlotDto } from './dto/get-time-slots.dto';
 import { ShopService } from 'src/shop-service/entities/shop-service.entity';
@@ -56,13 +56,17 @@ export class TimeSlotsService {
       }
       bookings = await this.bookingService.findByParam(params);
     }
-
+    let where = { id: Not(IsNull()) };
+    if (filter.time_from && filter.time_to) {
+      where['time_from'] = Between(filter.time_from, filter.time_to);
+    }
     const data = await paginate(query, this.timeSlotRepository, {
       sortableColumns: ['id'],
       defaultSortBy: [['time_from', 'ASC']],
       searchableColumns: [],
       filterableColumns: {},
       select: ['id', 'time_from'],
+      where,
     });
 
     // Add is_available field
