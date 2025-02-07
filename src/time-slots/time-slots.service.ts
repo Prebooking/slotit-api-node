@@ -49,11 +49,11 @@ export class TimeSlotsService {
 
       if (date) params.date = date;
       if (shop_room_id) params.shop_room_id = shop_room_id;
-      if (shop_service_ids && typeof shop_service_ids === 'string') {
-        params.shopServices = {
-          id: In(shop_service_ids.split(',').map((id) => id.trim())), // Ensure trimming for clean IDs
-        };
-      }
+      // if (shop_service_ids && typeof shop_service_ids === 'string') {
+      //   params.shopServices = {
+      //     id: In(shop_service_ids.split(',').map((id) => id.trim())), // Ensure trimming for clean IDs
+      //   };
+      // }
       bookings = await this.bookingService.findByParam(params);
     }
     let where = { id: Not(IsNull()) };
