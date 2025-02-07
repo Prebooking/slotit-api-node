@@ -16,6 +16,7 @@ import {
   PaginateQuery,
 } from 'nestjs-paginate';
 import { ShopServiceService } from 'src/shop-service/shop-service.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class BookingsService {
@@ -24,6 +25,7 @@ export class BookingsService {
     private readonly bookingRepository: Repository<Booking>,
     private response: ResponseService,
     private shopServiceService: ShopServiceService,
+    private userService: UsersService,
   ) {}
   async create(bookingData: CreateBookingDto, user_id: string) {
     bookingData.user_id = user_id;
@@ -33,16 +35,22 @@ export class BookingsService {
     return this.response.successResponse('booking recorded', savedBooking);
   }
 
-  async findAll(query: PaginateQuery) {
+  async findAll(query: PaginateQuery, user_id: string) {
+    const user = await this.userService.findOneById(user_id);
     return paginate(query, this.bookingRepository, {
       sortableColumns: ['id'],
       relations: ['shopRoom', 'shopServices'],
-      defaultSortBy: [['id', 'DESC']],
+      defaultSortBy: [['date', 'DESC']],
       searchableColumns: ['date'],
       filterableColumns: {
         shop_room_id: [FilterOperator.EQ, FilterSuffix.NOT],
         date: [FilterOperator.EQ, FilterSuffix.NOT],
         status: [FilterOperator.EQ, FilterSuffix.NOT],
+      },
+      where: {
+        shopRoom: {
+          shop_id: user.shop_id,
+        },
       },
     });
   }

@@ -43,8 +43,8 @@ export class BookingsController {
 
   @UseGuards(AccessTokenGuard)
   @Get()
-  async findAll(@Paginate() query: PaginateQuery) {
-    return await this.bookingService.findAll(query);
+  async findAll(@Paginate() query: PaginateQuery, @Req() req: Request) {
+    return await this.bookingService.findAll(query, req['uid']);
   }
 
   @UseGuards(AccessTokenGuard)

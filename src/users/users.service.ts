@@ -126,4 +126,12 @@ export class UsersService {
     await this.userRepository.save(user);
     return this.responseService.successResponse('User updated', user);
   }
+
+  async findOneById(id: string) {
+    const user = await this.findOneByParam({ id });
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+    return user;
+  }
 }
