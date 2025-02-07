@@ -101,6 +101,7 @@ export class BookingsService {
     booking.shopServices = services;
     booking.is_online = false;
     booking.amount = amount ? amount : totalCharge;
+    booking.services_count = services.length;
 
     const savedBooking = await this.bookingRepository.save(booking);
     // await this.bookingRepository.save(savedBooking);
