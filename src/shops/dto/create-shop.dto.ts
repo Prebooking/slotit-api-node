@@ -24,11 +24,11 @@ export class CreateShopDto {
   address: object;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   contact_email: string;
 
   @IsMobilePhone()
-  @IsNotEmpty()
+  @IsOptional()
   contact_phone: string;
 
   @IsString()

@@ -1,3 +1,4 @@
+import { Role } from 'src/roles/entities/role.entity';
 import { ShopRoom } from 'src/shop-rooms/entities/shop-room.entity';
 import { Shop } from 'src/shops/entities/shop.entity';
 import {
@@ -37,4 +38,10 @@ export class RoleUser {
   })
   @JoinColumn({ name: 'shop_room_id' })
   shopRoom: ShopRoom;
+
+  @ManyToOne(() => Role, (role) => role.roleUsers, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 }

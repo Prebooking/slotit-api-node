@@ -1,3 +1,4 @@
+import { RoleUser } from 'src/role-user/entities/role-user.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -9,6 +10,7 @@ import {
   Generated,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('roles')
@@ -42,4 +44,7 @@ export class Role {
    */
   @ManyToMany(() => User, (user) => user.roles)
   users: User[];
+
+  @OneToMany(() => RoleUser, (roleUser) => roleUser.role)
+  roleUsers: RoleUser[];
 }

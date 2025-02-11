@@ -6,12 +6,13 @@ import { Shop } from './entities/shop.entity';
 import { CommonModule } from 'src/common/common.module';
 import { UsersModule } from 'src/users/users.module';
 import { RolesModule } from 'src/roles/roles.module';
+import { RoleUserModule } from 'src/role-user/role-user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Shop]),
     CommonModule,
-    RolesModule,
+    RoleUserModule,
     UsersModule,
   ],
   controllers: [ShopsController],

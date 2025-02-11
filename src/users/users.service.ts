@@ -76,7 +76,7 @@ export class UsersService {
   ): Promise<User | undefined> {
     // Find and return the record based on dynamic parameters
     // return this.userRepository.findOneBy(params);
-    return this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: params,
       relations,
     });
@@ -98,7 +98,7 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
-  async createShopOwnerUser(shop: Shop, password: string) {
+  async createShopOwnerUser(shop: Shop, password: string): Promise<User> {
     const userData: CreateUserDto = {
       first_name: shop.name,
       last_name: null,
@@ -108,8 +108,7 @@ export class UsersService {
       shop_id: shop.id,
       user_type: 'shop_owner',
     };
-    const user = await this.createUser(userData);
-    await this.roleUserService.addShopOwnerRole(user, shop);
+    return await this.createUser(userData);
   }
 
   async generatePassword(inputString: string) {
@@ -133,5 +132,9 @@ export class UsersService {
       throw new NotFoundException('user not found');
     }
     return user;
+  }
+
+  async markShopAsDefault(shop_id: string, user_id) {
+    return await this.userRepository.update(user_id, { shop_id });
   }
 }

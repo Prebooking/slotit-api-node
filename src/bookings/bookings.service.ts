@@ -26,7 +26,7 @@ export class BookingsService {
     private response: ResponseService,
     private shopServiceService: ShopServiceService,
     private userService: UsersService,
-  ) { }
+  ) {}
   async create(bookingData: CreateBookingDto, user_id: string) {
     bookingData.user_id = user_id;
     const booking = this.bookingRepository.create(bookingData);
