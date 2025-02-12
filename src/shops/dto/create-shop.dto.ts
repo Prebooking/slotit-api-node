@@ -23,6 +23,9 @@ export class CreateShopDto {
   @IsNotEmpty()
   address: object;
 
+  @IsOptional()
+  whatsapp_identifier: string;
+
   @IsString()
   @IsOptional()
   contact_email: string;

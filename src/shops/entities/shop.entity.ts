@@ -32,6 +32,9 @@ export class Shop {
   @Column('varchar')
   image: string;
 
+  @Column('varchar')
+  whatsapp_identifier: string;
+
   @Column('json')
   address: object;
 
