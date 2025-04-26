@@ -23,12 +23,12 @@ export class CreateUsersTable1725027387420 implements MigrationInterface {
           {
             name: 'last_name',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'user_type',
             type: 'enum',
-            enum: ['superAdmin', 'client', 'user', 'staff'], // ENUM type for MySQL
+            enum: ['super_admin', 'shop_owner', 'user', 'shop_admin'], // ENUM type for MySQL
             isNullable: true,
           },
           {

@@ -14,8 +14,8 @@ export class CreateUserDto {
   last_name: string;
 
   @IsOptional()
-  @IsEnum(['superAdmin', 'client', 'user', 'staff'])
-  user_type?: 'superAdmin' | 'client' | 'user' | 'staff';
+  @IsEnum(['super_admin', 'shop_owner', 'user', 'shop_admin'])
+  user_type: 'super_admin' | 'shop_owner' | 'user' | 'shop_admin';
 
   @IsOptional()
   @IsEmail()
@@ -32,4 +32,8 @@ export class CreateUserDto {
   @IsOptional()
   @IsBoolean()
   is_active?: boolean;
+
+  @IsOptional()
+  @IsString()
+  shop_id: string;
 }

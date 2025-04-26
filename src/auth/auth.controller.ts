@@ -17,10 +17,9 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Role } from 'src/common/decorators/roles.decorator';
 import { Request, Response } from 'express';
 
-
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   signIn(@Body() signInDto: SignInDto, @Headers() headers: any) {

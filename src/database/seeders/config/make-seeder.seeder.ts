@@ -8,7 +8,7 @@ if (!className) {
   process.exit(1);
 }
 
-const directory = path.join(__dirname, './');
+const directory = path.join(__dirname, '../');
 
 const seederContent = `
 import { Injectable } from '@nestjs/common';

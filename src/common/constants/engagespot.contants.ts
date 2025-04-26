@@ -12,6 +12,6 @@ export const ENGAGESPOT_API_SECRET: string =
 export const ES_LOGIN_OTP =
   configService.get<string>('EN_LOGIN_OTP') || 'login_otp';
 
-  export const ES_MEMBER_PAYMENT_REQUEST =
-  configService.get<string>('ES_MEMBER_PAYMENT_REQUEST') || 'member_payment_request';
-  
+export const ES_MEMBER_PAYMENT_REQUEST =
+  configService.get<string>('ES_MEMBER_PAYMENT_REQUEST') ||
+  'member_payment_request';

@@ -11,14 +11,20 @@ import {
   ManyToMany,
   JoinTable,
   BeforeInsert,
+  OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Booking } from 'src/bookings/entities/booking.entity';
+import { ShopRoom } from 'src/shop-rooms/entities/shop-room.entity';
 
 @Entity('users')
 export class User {
   @PrimaryColumn('varchar', { length: 36 })
   @Generated('uuid')
   id: string;
+
+  @Column('varchar', { nullable: true })
+  shop_id: string;
 
   @Column('varchar')
   first_name: string;
@@ -27,10 +33,10 @@ export class User {
   last_name: string;
 
   @Column('enum', {
-    enum: ['superAdmin', 'client', 'user', 'staff'],
+    enum: ['super_admin', 'shop_owner', 'user', 'shop_admin'],
     nullable: true,
   })
-  user_type: 'superAdmin' | 'client' | 'user' | 'staff';
+  user_type: 'super_admin' | 'shop_owner' | 'user' | 'shop_admin';
 
   @Column('varchar', { unique: true, nullable: true })
   email: string;
@@ -83,4 +89,22 @@ export class User {
     },
   })
   roles: Role[];
+
+  @ManyToMany(() => ShopRoom)
+  @JoinTable({
+    name: 'role_user',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'shop_room_id',
+    },
+  })
+  shopRooms: ShopRoom[];
+
+  @OneToMany(() => Booking, (Booking) => Booking.user)
+  bookings: Booking[];
+
+  @OneToMany(() => Booking, (Booking) => Booking.staff)
+  staffBookings: Booking[];
 }

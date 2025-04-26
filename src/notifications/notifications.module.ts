@@ -6,6 +6,5 @@ import { EngagespotService } from './services/engagespot.service';
 @Module({
   controllers: [NotificationsController],
   providers: [NotificationsService, EngagespotService],
-
 })
-export class NotificationsModule { }
+export class NotificationsModule {}

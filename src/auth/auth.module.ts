@@ -7,12 +7,8 @@ import { CommonModule } from 'src/common/common.module';
 import { AuthTokenervice } from './services/auth-token.service';
 
 @Module({
-  imports: [
-    JwtModule.register({}),
-    UsersModule,
-    CommonModule
-  ],
+  imports: [JwtModule.register({}), UsersModule, CommonModule],
   controllers: [AuthController],
   providers: [AuthService, AuthTokenervice],
 })
-export class AuthModule { }
+export class AuthModule {}
