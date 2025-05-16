@@ -22,10 +22,11 @@ export class ShopsService {
     private response: ResponseService,
     private userService: UsersService,
     private roleUserService: RoleUserService,
-  ) {}
+  ) { }
 
   async create(createShopDto: CreateShopDto) {
-    const newShop = this.shopRepository.create(createShopDto);
+    const { password, ...data } = createShopDto;
+    const newShop = this.shopRepository.create(data);
     const shop = await this.shopRepository.save(newShop);
   }
   async createShopWithAdmin(createShopDto: CreateShopDto) {

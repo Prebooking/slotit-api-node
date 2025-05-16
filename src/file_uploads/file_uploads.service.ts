@@ -15,7 +15,7 @@ export class FileUploadsService {
     const s3 = new S3();
     const uploadResult = await s3
       .upload({
-        Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
+        Bucket: process.env.AWS_PUBLIC_BUCKET_NAME || "slotit",
         Body: dataBuffer,
         Key: `${uuid()}-filename-${filename}`,
         // ContentType: 'image/jpeg',
@@ -34,7 +34,7 @@ export class FileUploadsService {
     const s3 = new S3();
     await s3
       .deleteObject({
-        Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
+        Bucket: process.env.AWS_PUBLIC_BUCKET_NAME || "slotit",
         Key: deleteFileDto.fileId,
       })
       .promise();

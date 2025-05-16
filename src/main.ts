@@ -7,6 +7,7 @@ import { json } from 'express';
 import { useContainer } from 'class-validator';
 import { ResInterceptor } from './res.interceptor';
 import { CatchFilter } from './catch.interceptor';
+import { config } from "aws-sdk";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -39,11 +40,12 @@ async function bootstrap() {
   app.useGlobalFilters();
 
   const configService = app.get(ConfigService);
-  // config.update({
-  //     accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
-  //     secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
-  //     region: configService.get('AWS_REGION'),
-  // });
+  config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey:
+      process.env.AWS_SECRET_ACCESS_KEY ,
+    region: process.env.AWS_REGION || "ap-south-1",
+  });
 
   await app.listen(process.env.PORT || 3000);
 }
