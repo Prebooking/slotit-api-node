@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { Service } from './entities/service.entity';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -20,13 +20,22 @@ export class ServicesService {
     const service = await this.serviceRepository.save(newService);
     return this.response.successResponse('Service created', service);
   }
-  async findAll(query: PaginateQuery) {
+  async findAll(query: PaginateQuery, categoryId?: string) {
+    let where: any = {
+      id: Not(IsNull()),
+    };
+
+    if (categoryId) {
+      where.category_id = categoryId;
+    }
+
     return paginate(query, this.serviceRepository, {
       sortableColumns: ['id'],
       relations: [],
       defaultSortBy: [['id', 'DESC']],
       searchableColumns: ['name'],
       filterableColumns: {},
+      where,
     });
   }
 
@@ -45,7 +54,7 @@ export class ServicesService {
   async remove(id: string): Promise<any> {
     const service = await this.findOneById(id);
     await this.serviceRepository.remove(service);
-    return this.response.successResponse('Service deletes');
+    return this.response.successResponse('Service deleted');
   }
 
   async findOneById(id: string): Promise<Service> {

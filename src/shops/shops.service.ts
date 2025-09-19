@@ -22,12 +22,13 @@ export class ShopsService {
     private response: ResponseService,
     private userService: UsersService,
     private roleUserService: RoleUserService,
-  ) { }
+  ) {}
 
   async create(createShopDto: CreateShopDto) {
     const { password, ...data } = createShopDto;
     const newShop = this.shopRepository.create(data);
     const shop = await this.shopRepository.save(newShop);
+    return shop;
   }
   async createShopWithAdmin(createShopDto: CreateShopDto) {
     const { contact_email } = createShopDto;
@@ -54,21 +55,27 @@ export class ShopsService {
     return this.response.successResponse('Shop created', shop);
   }
 
-  async findAll(query: PaginateQuery, user_id: string) {
+  async findAll(query: PaginateQuery, user_id: string, categoryId?: string) {
+    const where: any = {
+      roleUsers: {
+        // user_id,
+        role: {
+          name: 'shop_owner',
+        },
+      },
+    };
+
+    if (categoryId) {
+      where.category_id = categoryId;
+    }
+
     return paginate(query, this.shopRepository, {
       sortableColumns: ['id'],
       relations: [],
       defaultSortBy: [['id', 'DESC']],
       searchableColumns: ['name'],
       filterableColumns: {},
-      where: {
-        roleUsers: {
-          user_id,
-          role: {
-            name: 'shop_owner',
-          },
-        },
-      },
+      where,
     });
   }
 

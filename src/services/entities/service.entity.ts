@@ -45,6 +45,9 @@ export class Service {
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deleted_at: Date;
 
+  @Column({ type: 'varchar', length: 36, nullable: true })
+  category_id?: string;
+
   @OneToMany(() => ShopService, (shopService) => shopService.service)
   @JoinColumn({
     name: 'service_id',

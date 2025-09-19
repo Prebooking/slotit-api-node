@@ -54,6 +54,9 @@ export class Shop {
   })
   updated_at: Date;
 
+  @Column({ type: 'varchar', length: 36, nullable: true })
+  category_id?: string;
+
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deleted_at: Date;
 

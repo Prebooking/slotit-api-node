@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
@@ -27,8 +29,16 @@ export class ShopsController {
   }
 
   @Get()
-  async findAll(@Paginate() query: PaginateQuery, @Req() req: Request) {
-    return await this.shopsService.findAll(query, req['uid']);
+  async findAll(
+    @Paginate() query: PaginateQuery,
+    @Req() req: Request,
+    @Query() filter?: any,
+  ) {
+    return await this.shopsService.findAll(
+      query,
+      req['uid'],
+      filter?.category_id,
+    );
   }
 
   @Get(':id')

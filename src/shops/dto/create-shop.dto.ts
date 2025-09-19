@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsObject,
   IsMobilePhone,
+  IsUUID,
 } from 'class-validator';
 
 export class CreateShopDto {
@@ -37,4 +38,8 @@ export class CreateShopDto {
   @IsString()
   @IsOptional()
   password: string;
+
+  @IsOptional()
+  @IsUUID()
+  category_id?: string;
 }

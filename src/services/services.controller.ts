@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { Paginate, PaginateQuery } from 'nestjs-paginate';
+import { filter } from 'rxjs';
 
 @Controller('services')
 export class ServicesController {
@@ -22,8 +25,8 @@ export class ServicesController {
   }
 
   @Get()
-  findAll(@Paginate() query: PaginateQuery) {
-    return this.servicesService.findAll(query);
+  findAll(@Paginate() query: PaginateQuery, @Query() filter?: any) {
+    return this.servicesService.findAll(query, filter?.category_id);
   }
 
   @Get(':id')
